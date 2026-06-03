@@ -1,4 +1,4 @@
-import type { ReplayData, UsageEntry } from "./types/index.js";
+import type { ParsedReplay, ReplayData, UsageEntry } from "./types/index.js";
 import { toID } from "./utils.js";
 
 export function extractReplayId(url: string): string | null {
@@ -16,104 +16,102 @@ export async function fetchReplay(url: string): Promise<ReplayData> {
     return res.json() as Promise<ReplayData>;
 }
 
-export function getTeams(log: string): { p1: string[]; p2: string[] } {
-    const p1: string[] = [];
-    const p2: string[] = [];
-    
-    for (const line of log.split("\n")) {
-        let parts = line.split('|').slice(1);
-        let type = parts.shift();
+const deepcopy = (obj: any) => JSON.parse(JSON.stringify(obj));
+const replayCache = new Map<string, ParsedReplay>();
 
-        // Break on battle start since we only care about team preview
-        if (type === "start") break;
-        if (type !== "poke") continue;
+export function parseReplay(replayData: ReplayData): ParsedReplay {
+    const { id, log } = replayData;
+    if (replayCache.has(id)) return deepcopy(replayCache.get(id)!);
 
-        let player = parts.shift() as "p1" | "p2";
-        let pokemon = parts.shift()!.split(",")[0]!;
-
-        (player === "p1" ? p1 : p2).push(pokemon);
+    const names = {
+        p1: '',
+        p2: ''
     }
+    const teams: {p1: string[], p2: string[]} = {
+        p1: [],
+        p2: []
+    }
+    const clicked: { p1: string, p2: string } = {
+        p1: '',
+        p2: ''
+    }
+    let winner: "p1" | "p2" | null = null;
+    let winnerName = null;
 
-    return { p1, p2 };
-}
-
-// Parse which mons were actually sent out (not just brought to team preview)
-export function parseClicked(log: string): { p1: string; p2: string } {
-    let p1: string | undefined;
-    let p2: string | undefined;
     let started = false;
 
-    for (const line of log.split("\n")) {
-        const parts = line.split("|").slice(1);
-        const type = parts.shift();
-        if (!started) {
-            if (type === "start") started = true;
-            continue;
-        }
-        
-        if (type !== "switch") continue;
+    for (const line of log.split('\n')) {
+        const [, type, ...rest] = line.split('|');
 
-        const player = parts.shift()?.match(/p[12]/)?.[0];
-        const species = parts.shift()?.split(',')[0];
-
-        if (player === "p1") {
-            if (p1) throw new Error("Multiple switch events found in a 1v1 replay");
-            p1 = species;
+        if (type === "start") {
+            started = true;
         }
 
-        if (player === "p2") {
-            if (p2) throw new Error("Multiple switch events found in a 1v1 replay");
-            p2 = species;
+        if (type === "player") {
+            const num = rest[0] as "p1" | "p2";
+            const name = toID(rest[1] ?? '');
+            names[num] = name;
+        }
+
+        if (type === "win") {
+            winnerName = toID(rest[0] ?? '');
+            winner = winnerName == names.p1 ? "p1" : "p2";
+        }
+
+        if (type === "poke") {
+            const player = rest[0] as "p1" | "p2";
+            const pokemon = rest[1]!.split(",")[0]!;
+
+            teams[player].push(pokemon);
+        }
+
+        if (type === "switch") {
+            const player = rest[0]!.match(/p[12]/)?.[0] as "p1" | "p2";
+            const pokemon = rest[1]!.split(',')[0]!;
+
+            clicked[player] = pokemon;
         }
     }
 
     if (!started) throw new Error("Battle never started, was it forfeited on preview...?");
-    if (!p1 || !p2) throw new Error("No leads found in replay");
 
-    return { p1, p2 };
-}
-
-export function getPlayerNames(log: string): {p1: string, p2: string} {
-    const players = {
-        p1: '',
-        p2: ''
-    }
-    for (const line of log.split("\n")) {
-        const parts = line.split("|").slice(1);
-        const type = parts.shift();
-
-        if (type === "player") {
-            const num = parts[0] as "p1" | "p2";
-            const name = toID(parts[1] ?? '');
-            players[num] = name;
-        }
+    const data: ParsedReplay = {
+        id,
+        playerNames: names,
+        winner,
+        winnerName,
+        teams,
+        clicked
     }
 
-    return players;
+    replayCache.set(id, deepcopy(data));
+
+    return data;
+    
 }
 
-export function getWinningPlayer(log: string): "p1" | "p2" | null {
-    const players = getPlayerNames(log);
-
-    for (const line of log.split("\n")) {
-        const parts = line.split("|").slice(1);
-        const type = parts.shift();
-
-        if (type !== "win") continue;
-        const playerName = toID(parts[0] ?? '');
-
-        if (players.p1 === playerName) return "p1";
-        if (players.p2 === playerName) return "p2";
-    }
-
-    return null;
+export function getTeams(data: ReplayData): { p1: string[]; p2: string[] } {
+    return parseReplay(data).teams;
 }
 
-export function buildUsageData(log: string): { usage: UsageEntry[], clickedUsage: UsageEntry[] } {
-    const clicked = parseClicked(log);
-    const teams = getTeams(log);
-    const names = getPlayerNames(log);
-    const winner = getWinningPlayer(log);
+// Parse which mons were actually sent out (not just brought to team preview)
+export function parseClicked(data: ReplayData): { p1: string; p2: string } {
+    return parseReplay(data).clicked;
+}
+
+export function getPlayerNames(data: ReplayData): {p1: string, p2: string} {
+    return parseReplay(data).playerNames;
+}
+
+export function getWinningPlayer(data: ReplayData): "p1" | "p2" | null {
+    return parseReplay(data).winner;
+}
+
+export function buildUsageData(data: ReplayData): { usage: UsageEntry[], clickedUsage: UsageEntry[] } {
+    const clicked = parseClicked(data);
+    const teams = getTeams(data);
+    const names = getPlayerNames(data);
+    const winner = getWinningPlayer(data);
 
     const clickedUsage: UsageEntry[] = [
         {

@@ -15,6 +15,15 @@ export interface ReplayData {
     formatid: string;
 }
 
+export interface ParsedReplay {
+    id: string;
+    playerNames: { p1: string; p2: string };
+    winner: "p1" | "p2" | null;
+    winnerName: string | null;
+    teams: { p1: string[], p2: string[] };
+    clicked: { p1: string, p2: string };
+}
+
 export interface UsageStat {
     name: string;
     brings: number;
