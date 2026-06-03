@@ -22,6 +22,12 @@ export interface UsageStat {
     wins: number;
 }
 
+export interface UsageEntry {
+    name: string;
+    player: string;
+    won: boolean;
+}
+
 // We store PS-smogon username links in localStorage 
 // key: PS username
 // value: Smogon username
