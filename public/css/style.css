@@ -27,7 +27,13 @@ main {
     flex-direction: column;
 }
 
-#output-step {
+#replay_input {
+    height: 150px;
+    width: 60%;
+    min-width: 300px;
+}
+
+#output {
     width: 65%;
     height: 100%;
 }

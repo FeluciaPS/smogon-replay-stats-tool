@@ -3,6 +3,7 @@
     border-radius: 10px;
     padding: 1rem 1.25rem;
     width: 60%;
+    min-width: 300px;
 }
 
 #config summary {
@@ -32,4 +33,10 @@
 .macot_row span {
     min-width: 180px;
     font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .macot_row {
+        flex-direction: column;
+    }
 }

@@ -1,3 +1,7 @@
+# v0.1.1
+The tool is now usable on mobile
+- Drastically improved mobile layout
+
 # v0.1.0
 First public release (woo!)
 - Match results are no longer bolded but instead hidden to avoid spoilers
