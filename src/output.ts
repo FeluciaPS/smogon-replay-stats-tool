@@ -1,6 +1,6 @@
 import { ParsedReplay, PlayerTeam, RenderContext, ReplayGroup, TeamMatchup } from "./types/index.js";
 
-const PROJECT_URL = '';
+const PROJECT_URL = 'https://feluciaps.github.io/smogon-replay-stats-tool/';
 export function generateBBCode(ctx: RenderContext, grouping: "tier" | "team", tagUsers: boolean = true, boldWinners: boolean = false): string {
     const errors = checkErrors(ctx);
     if (errors.hasErrors) return errors.message;
