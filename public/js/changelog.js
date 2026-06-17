@@ -13,7 +13,7 @@ const modal = document.getElementById("changelog_modal");
 document.getElementById("changelog_open_btn").addEventListener("click", () => {
     modal.showModal();
 });
-document.getElementById("changelog_close_btn").addEventListener("click", () => {
+document.querySelector("#changelog_modal > .close_button").addEventListener("click", () => {
     modal.close();
 });
 modal.addEventListener("click", (e) => {
