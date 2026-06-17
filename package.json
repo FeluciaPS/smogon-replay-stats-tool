@@ -1,11 +1,12 @@
 {
-    "name": "1v1-replay-stats-tool",
-    "version": "0.0.0",
+    "name": "smogon-replay-stats-tool",
+    "version": "0.1.0",
     "scripts": {
         "build": "tsc",
         "watch": "tsc --watch"
     },
     "devDependencies": {
+        "@types/markdown-it": "^14.1.2",
         "typescript": "^5.4.0"
     }
 }

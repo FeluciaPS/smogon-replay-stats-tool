@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>1v1 Replay Tool</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.2.0/dist/markdown-it.min.js"></script>
+
+        <script type="module" src="js/main.js"></script>
+        <script type="module" src="js/changelog.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/cards.css">
+        <link rel="stylesheet" href="css/config.css">
+        <link rel="stylesheet" href="css/changelog.css">
+
+    </head>
+    <body>
+        <dialog id="changelog_modal" class="modal">
+            <button class="close_button">Close</button>
+            <div id="changelog_content"></div>
+        </dialog>
+        <main>
+            <div class="col">
+                <section id="input">
+                    <details id="config">
+                        <summary>Tournament Config</summary>
+
+                        <div>
+                            <label for="tiers_input">Tiers (one per line ordered)</label>
+                            <textarea id="tiers_input" rows="8"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="teams_input">Teams (one per line)</label>
+                            <textarea id="teams_input" rows="8"></textarea>
+                            <button id="setup_teams_btn" type="button">Set up teams</button>
+                        </div>
+
+                        <div id="mascot_fields"></div>
+
+                    </details>
+
+                    <h2>Replays</h2>
+                    <textarea id="replay_input" rows="10" cols="60" placeholder="Paste replay URLs or smogon thread to pull them from"></textarea>
+                    <br>
+                    <button id="load_replays_btn">Load Replays</button>
+                    <button id="changelog_open_btn">Changelog</button>
+
+                    <div id="progress_bar_container" hidden>
+                        <progress id="progress" value="0" max="100"></progress>
+                        <span id="progress_text">Loading replays... 0%</span>
+                    </div>
+                </section>
+
+                <section id="review">
+                    <div id="review_container"></div>
+                </section>
+            </div>
+            <div class="col">
+                <section id="output">
+                    <h2>BBCode Output</h2>
+                    <textarea id="bbcode_output" readonly></textarea>
+                    <button id="copy_button">Copy to clipboard</button>
+                </section>
+            </div>
+        </main>
+    </body>
+</html>

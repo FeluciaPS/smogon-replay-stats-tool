@@ -1,0 +1,35 @@
+#config {
+    border: 0.5px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    width: 60%;
+}
+
+#config summary {
+    cursor: pointer;
+    user-select: none;
+}
+
+#config > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 1rem;
+}
+
+#mascot_fields {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.macot_row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.macot_row span {
+    min-width: 180px;
+    font-size: 14px;
+}
