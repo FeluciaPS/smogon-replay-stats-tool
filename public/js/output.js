@@ -1,4 +1,4 @@
-const PROJECT_URL = '';
+const PROJECT_URL = 'https://feluciaps.github.io/smogon-replay-stats-tool/';
 export function generateBBCode(ctx, grouping, tagUsers = true, boldWinners = false) {
     const errors = checkErrors(ctx);
     if (errors.hasErrors)
