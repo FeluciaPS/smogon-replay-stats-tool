@@ -1,3 +1,8 @@
+# v0.1.3
+Bugfix update
+- Fix width for FAQ popup
+- Remove error when replay is forfeited/lost on preview
+
 # v0.1.2
 FAQ and small layout updates
 - Added FAQ

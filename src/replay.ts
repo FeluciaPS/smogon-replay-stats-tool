@@ -232,7 +232,7 @@ export function parseReplay(replayData: ReplayData): ParsedReplay {
         }
     }
 
-    if (!started) throw new Error("Battle never started, was it forfeited on preview...?");
+    //if (!started) throw new Error(`Battle ${replayData.id} never started, was it forfeited on preview...?`);
 
     const data: ParsedReplay = {
         id,

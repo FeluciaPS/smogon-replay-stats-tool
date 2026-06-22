@@ -194,8 +194,7 @@ export function parseReplay(replayData) {
             clicked[player] = pokemon;
         }
     }
-    if (!started)
-        throw new Error("Battle never started, was it forfeited on preview...?");
+    //if (!started) throw new Error(`Battle ${replayData.id} never started, was it forfeited on preview...?`);
     const data = {
         id,
         format,
