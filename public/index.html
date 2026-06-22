@@ -8,7 +8,7 @@
         <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.2.0/dist/markdown-it.min.js"></script>
 
         <script type="module" src="js/main.js"></script>
-        <script type="module" src="js/changelog.js"></script>
+        <script type="module" src="js/markdown.js"></script>
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/cards.css">
         <link rel="stylesheet" href="css/config.css">
@@ -16,9 +16,9 @@
 
     </head>
     <body>
-        <dialog id="changelog_modal" class="modal">
+        <dialog id="dynamic_modal" class="modal">
             <button class="close_button">Close</button>
-            <div id="changelog_content"></div>
+            <div id="modal_content"></div>
         </dialog>
         <main>
             <div class="col">
@@ -41,11 +41,15 @@
 
                     </details>
 
-                    <h2>Replays</h2>
-                    <textarea id="replay_input" placeholder="Paste replay URLs or smogon thread to pull them from"></textarea>
-                    <br>
-                    <button id="load_replays_btn">Load Replays</button>
-                    <button id="changelog_open_btn">Changelog</button>
+                    <div id="replays">
+                        <h2>Replays</h2>
+                        <textarea id="replay_input" placeholder="Paste replay URLs or smogon thread to pull them from"></textarea>
+                        <br>
+                        <button id="load_replays_btn">Load Replays</button>
+                        <button id="changelog_open_btn">Changelog</button>
+                        <button id="faq_open_btn">FAQ</button>
+                    </div>
+
 
                     <div id="progress_bar_container" hidden>
                         <progress id="progress" value="0" max="100"></progress>

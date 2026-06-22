@@ -1,3 +1,9 @@
+# v0.1.2
+FAQ and small layout updates
+- Added FAQ
+- Threw in a font I happened to have laying around in a different project, may change it later but it beats the default
+- Fixed some minor layout spacing things on desktop (turns out mobile layout broke desktop OOPS)
+
 # v0.1.1
 The tool is now usable on mobile
 - Drastically improved mobile layout
